@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 public class MenuSystemTest {
 
     private Menu main;
-    private String log;
     private int firstItem;
     private int secondItem;
     private int thirdItem;
@@ -73,12 +72,13 @@ public class MenuSystemTest {
 
     @Test
     public void testInvalidSelection() {
-        String expectedOutput = "Please select a number between 0 - 3.";
+        String expectedOutput = "Please select a number between 0 and 3.";
         boolean exceptionThrown;
         try {
             main.input("9");
             exceptionThrown = false;
         } catch (Menu.InvalidMenuSelectionException e) {
+            assertEquals(e.getMessage(), expectedOutput);
             exceptionThrown = true;
         }
         assertEquals(exceptionThrown, true);
