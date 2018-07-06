@@ -39,6 +39,26 @@ public class UserInterfaceTest {
     }
 
     @Test
+    public void invalidInputShowsErrorTest() {
+        final String input = "e\n0";
+        final String output = "Welcome to Biblioteca!\n" +
+                "Press any key to select an option.\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n" +
+                "\n\n" +
+                "Please select a number between 0 and 3.\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n\n";
+        setInput(input);
+        BibliotecaApp.main(new String[0]);
+        assertEquals(output, getOutput());
+    }
+
+    @Test
     public void listBooksTest() {
         final String input = "1\n0";
         final String output = "Welcome to Biblioteca!\n" +
@@ -107,6 +127,80 @@ public class UserInterfaceTest {
                 "\n" +
                 "Please enter the name of the book to return: \n" +
                 "Thank you for returning the book.\n" +
+                "\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n\n";
+        setInput(input);
+        BibliotecaApp.main(new String[0]);
+        assertEquals(output, getOutput());
+    }
+
+    @Test
+    public void checkoutFakeBookFailsTest() {
+        final String input = "2\nThe cat in the hat\n0";
+        final String output = "Welcome to Biblioteca!\n" +
+                "Press any key to select an option.\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n" +
+                "\n" +
+                "Please enter the name of the book to checkout: \n" +
+                "That book is not available.\n" +
+                "\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n\n";
+        setInput(input);
+        BibliotecaApp.main(new String[0]);
+        assertEquals(output, getOutput());
+    }
+
+    @Test
+    public void checkoutTwiceFailsTest() {
+        final String input = "2\nThe Conquest of Bread\n2\nThe Conquest of Bread\n0";
+        final String output = "Welcome to Biblioteca!\n" +
+                "Press any key to select an option.\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n" +
+                "\n" +
+                "Please enter the name of the book to checkout: \n" +
+                "Thank you! Enjoy the book.\n" +
+                "\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n" +
+                "\n" +
+                "Please enter the name of the book to checkout: \n" +
+                "That book is not available.\n" +
+                "\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n\n";
+        setInput(input);
+        BibliotecaApp.main(new String[0]);
+        assertEquals(output, getOutput());
+    }
+
+    @Test
+    public void returnNotCheckedOutBooksFailsTest() {
+        final String input = "3\nThe Conquest of Bread\n0";
+        final String output = "Welcome to Biblioteca!\n" +
+                "Press any key to select an option.\n" +
+                " 1 | List books\n" +
+                " 2 | Checkout book\n" +
+                " 3 | Return book\n" +
+                " 0 | Quit\n" +
+                "\n" +
+                "Please enter the name of the book to return: \n" +
+                "That is not a valid book to return.\n" +
                 "\n" +
                 " 1 | List books\n" +
                 " 2 | Checkout book\n" +

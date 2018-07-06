@@ -30,7 +30,7 @@ public class BibliotecaApp {
                 System.out.println(menu);
                 menu.input(sc.nextLine().replace("\n", ""));
             } catch (Menu.InvalidMenuSelectionException e) {
-                System.out.println(e.getMessage());
+                System.out.println("\n" + e.getMessage());
             }
         }
     }
