@@ -1,12 +1,12 @@
 package com.twu.biblioteca;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class Book {
     private final String title;
     private final String author;
-    private final Date published;
+    private final int year;
+    private boolean checkedOut = false;
 
 
     @Override
@@ -14,23 +14,14 @@ public class Book {
         return Objects.hash(this.title, this.author);
     }
 
-    public Book(String title, String author, Date published) {
-        this.title = title;
-        this.author = author;
-        this.published = published;
-    }
-
     public Book(String title, String author, int year) {
         this.title = title;
         this.author = author;
-        this.published = new Date(year, 0, 0);
+        this.year = year;
     }
 
     public boolean equals(Book obj) {
-        // I could refactor this to just use hashCode()
-        return (this.getTitle().equals(obj.getTitle())
-                && this.getAuthor().equals(obj.getAuthor())
-                && this.getPublished().equals(obj.getPublished()));
+        return (this.hashCode() == obj.hashCode());
     }
 
     public String getTitle() {
@@ -41,7 +32,11 @@ public class Book {
         return author;
     }
 
-    public Date getPublished() {
-        return published;
+    public int getYear() {
+        return year;
+    }
+
+    public boolean isCheckedOut() {
+        return checkedOut;
     }
 }
