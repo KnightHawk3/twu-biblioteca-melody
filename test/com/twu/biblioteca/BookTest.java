@@ -22,12 +22,12 @@ public class BookTest {
         library.add(new Book("Capital. Critique of Political Economy ", "Karl Marx", 1867));
         library.add(new Book("The Ego and Its Own", "Max Stirner", 1845));
         bib = new Biblioteca(library);
-
     }
 
     @Test
     public void listBookDetailsTest() {
-        String expected = "+-----------------------------------------+-----------------+------+\n" +
+        String expected =
+                "+-----------------------------------------+-----------------+------+\n" +
                 "| Title                                   | Author          | Year |\n" +
                 "+-----------------------------------------+-----------------+------+\n" +
                 "| The Conquest of Bread                   | Peter Kropotkin | 1892 |\n" +
@@ -40,20 +40,27 @@ public class BookTest {
 
     @Test
     public void checkoutBookTest() {
-        assertTrue(bib.checkout("The Conquest of Bread"));
+        assertTrue(bib.checkoutBook("The Conquest of Bread"));
     }
 
     @Test
     public void listBookDetailsDoesntDisplayCheckedOutBooksTest() {
-        String expected = "+-----------------------------------------+-----------------+------+\n" +
-                "| Title                                   | Author          | Year |\n" +
+        String expected =
                 "+-----------------------------------------+-----------------+------+\n" +
-                "| The Conquest of Bread                   | Peter Kropotkin | 1892 |\n" +
-                "| Capital. Critique of Political Economy  | Karl Marx       | 1867 |\n" +
-                "+-----------------------------------------+-----------------+------+\n";
-        bib.checkout("The Ego and Its Own");
+                        "| Title                                   | Author          | Year |\n" +
+                        "+-----------------------------------------+-----------------+------+\n" +
+                        "| The Conquest of Bread                   | Peter Kropotkin | 1892 |\n" +
+                        "| Capital. Critique of Political Economy  | Karl Marx       | 1867 |\n" +
+                        "+-----------------------------------------+-----------------+------+\n";
+        bib.checkoutBook("The Ego and Its Own");
         String books = bib.listBookDetails();
         assertEquals(expected, books);
+    }
+
+    @Test
+    public void returnBookTest() {
+        bib.checkoutBook("The Conquest of Bread");
+        assertTrue(bib.returnBook("The Conquest of Bread"));
     }
 
     @Test

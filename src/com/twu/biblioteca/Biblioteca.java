@@ -58,11 +58,23 @@ public class Biblioteca {
         return output;
     }
 
-    public boolean checkout(String title) {
+    public boolean checkoutBook(String title) {
         for (Book book : library) {
             if (book.getTitle().equals(title)) {
                 if (!book.isCheckedOut()) {
                     book.setCheckedOut(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean returnBook(String title) {
+        for (Book book : library) {
+            if (book.getTitle().equals(title)) {
+                if (book.isCheckedOut()) {
+                    book.setCheckedOut(false);
                     return true;
                 }
             }
