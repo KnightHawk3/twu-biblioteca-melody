@@ -45,7 +45,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n" +
                 "\n\n" +
-                "Please select a number between 0 and 3.\n" +
+                "Select a valid option!\n" +
                 " 1 | List books\n" +
                 " 2 | Checkout book\n" +
                 " 3 | Return book\n" +

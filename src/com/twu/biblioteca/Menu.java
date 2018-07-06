@@ -40,7 +40,7 @@ public class Menu {
             try {
                 this.menuItems[Integer.parseInt(s) - 1].callAction();
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-                throw new InvalidMenuSelectionException(String.format("Please select a number between 0 and %d.", menuItems.length));
+                throw new InvalidMenuSelectionException("Select a valid option!");
             }
         }
     }

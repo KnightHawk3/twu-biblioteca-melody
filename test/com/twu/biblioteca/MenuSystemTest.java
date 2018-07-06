@@ -72,7 +72,7 @@ public class MenuSystemTest {
 
     @Test
     public void testInvalidSelection() {
-        String expectedOutput = "Please select a number between 0 and 3.";
+        String expectedOutput = "Select a valid option!";
         boolean exceptionThrown;
         try {
             main.input("9");
@@ -86,7 +86,7 @@ public class MenuSystemTest {
 
     @Test
     public void testInvalidInput() {
-        String expectedOutput = "Please select a number between 0 and 3.";
+        String expectedOutput = "Select a valid option!";
         boolean exceptionThrown;
         try {
             main.input("e");
