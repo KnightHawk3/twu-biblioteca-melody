@@ -12,7 +12,7 @@ public class BibliotecaApp {
     public static void main(String[] args) {
         System.out.println("Welcome to Biblioteca!\nPress any key to select an option.");
         sc = new Scanner(System.in);
-        List<Book> books = new ArrayList<Book>();
+        List<Book> books = new ArrayList<>();
         books.add(new Book("The Conquest of Bread", "Peter Kropotkin", 1892));
         books.add(new Book("Capital. Critique of Political Economy ", "Karl Marx", 1867));
         books.add(new Book("The Ego and Its Own", "Max Stirner", 1845));

@@ -12,15 +12,12 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class UserInterfaceTest {
-    private BibliotecaApp bib;
     private ByteArrayOutputStream outputStream;
-    private ByteArrayInputStream inputStream;
 
     @Before
     public void setUp() {
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
-        bib = new BibliotecaApp();
     }
 
     @After
@@ -216,7 +213,7 @@ public class UserInterfaceTest {
     }
 
     private void setInput(String data) {
-        inputStream = new ByteArrayInputStream(data.getBytes());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(data.getBytes());
         System.setIn(inputStream);
     }
 }

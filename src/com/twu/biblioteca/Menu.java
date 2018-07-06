@@ -12,7 +12,7 @@ public class Menu {
         }
     }
     private boolean done;
-    private MenuItem[] menuItems;
+    private final MenuItem[] menuItems;
 
     public Menu(MenuItem[] menuItems) {
         this.menuItems = menuItems;
@@ -24,12 +24,12 @@ public class Menu {
 
     @Override
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < menuItems.length; i++) {
-            output += String.format(" %d | %s\n", i + 1, menuItems[i].getTitle());
+            output.append(String.format(" %d | %s\n", i + 1, menuItems[i].getTitle()));
         }
-        output += " 0 | Quit\n";
-        return output;
+        output.append(" 0 | Quit\n");
+        return output.toString();
     }
 
     public void input(String s) throws InvalidMenuSelectionException {

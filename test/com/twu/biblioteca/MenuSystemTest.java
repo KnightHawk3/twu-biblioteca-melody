@@ -4,7 +4,7 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class MenuSystemTest {
 
@@ -41,12 +41,12 @@ public class MenuSystemTest {
 
     @Test
     public void testMenuQuits() {
-        assertEquals(main.isDone(), false);
+        assertFalse(main.isDone());
         try {
             main.input("0"); // Check quitting works
         } catch (Exception e) {
         }
-        assertEquals(main.isDone(), true);
+        assertTrue(main.isDone());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class MenuSystemTest {
             assertEquals(e.getMessage(), expectedOutput);
             exceptionThrown = true;
         }
-        assertEquals(exceptionThrown, true);
+        assertTrue(exceptionThrown);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class MenuSystemTest {
             assertEquals(e.getMessage(), expectedOutput);
             exceptionThrown = true;
         }
-        assertEquals(exceptionThrown, true);
+        assertTrue(exceptionThrown);
     }
 
     @Test

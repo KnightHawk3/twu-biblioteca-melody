@@ -15,7 +15,7 @@ public class Biblioteca {
     }
 
     public String listBookDetails() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         int titleWidth = 0;
         int authorWidth = 0;
         int yearWidth = 0;
@@ -46,16 +46,16 @@ public class Biblioteca {
         bookLine += "| %-" + titleWidth + "s | %-" + authorWidth + "s | %-" + yearWidth + "s |\n";
 
         // Build the table
-        output += linebreak;
-        output += String.format(bookLine, "Title", "Author", "Year");
-        output += linebreak;
+        output.append(linebreak);
+        output.append(String.format(bookLine, "Title", "Author", "Year"));
+        output.append(linebreak);
         for (Book book : getLibrary()) {
             if (!book.isCheckedOut()) {
-                output += String.format(bookLine, book.getTitle(), book.getAuthor(), book.getYear());
+                output.append(String.format(bookLine, book.getTitle(), book.getAuthor(), book.getYear()));
             }
         }
-        output += linebreak;
-        return output;
+        output.append(linebreak);
+        return output.toString();
     }
 
     public boolean checkoutBook(String title) {
