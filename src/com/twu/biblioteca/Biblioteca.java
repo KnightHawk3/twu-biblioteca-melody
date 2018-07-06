@@ -19,42 +19,54 @@ public class Biblioteca {
         int titleWidth = 0;
         int authorWidth = 0;
         int yearWidth = 0;
+
+        // Find out column widths
         for (Book book : getLibrary()) {
-            if (book.isCheckedOut()) {
-                break;
-            }
-            if (book.getTitle().length() > titleWidth) {
-                titleWidth = book.getTitle().length();
-            }
-            if (book.getAuthor().length() > authorWidth) {
-                authorWidth = book.getTitle().length();
-            }
-            if (book.getYear() > yearWidth) {
-                yearWidth = book.getTitle().length();
+            if (!book.isCheckedOut()) {
+                if (book.getTitle().length() > titleWidth) {
+                    titleWidth = book.getTitle().length();
+                }
+                if (book.getAuthor().length() > authorWidth) {
+                    authorWidth = book.getAuthor().length();
+                }
+                if (book.getYear() > yearWidth) {
+                    yearWidth = String.valueOf(book.getYear()).length();
+                }
             }
         }
-        output += String.join("", Collections.nCopies(titleWidth / 2, " "));
-        output += "Title";
-        output += String.join("", Collections.nCopies(titleWidth / 2, " "));
-        output += String.join("", Collections.nCopies(authorWidth / 2, " "));
-        output += "Author";
-        output += String.join("", Collections.nCopies(authorWidth / 2, " "));
+
+        // Build formatting strings for table
+        String linebreak = "";
+        String bookLine = "";
+
+        // Please take a moment to ponder why "".repeat(5) is going to be released in JDK 11.
+        linebreak += "+" + String.join("", Collections.nCopies(titleWidth + 2, "-")) + "+";
+        linebreak += String.join("", Collections.nCopies(authorWidth + 2, "-")) + "+";
+        linebreak += String.join("", Collections.nCopies(yearWidth + 2, "-")) + "+\n";
+        bookLine += "| %-" + titleWidth + "s | %-" + authorWidth + "s | %-" + yearWidth + "s |\n";
+
+        // Build the table
+        output += linebreak;
+        output += String.format(bookLine, "Title", "Author", "Year");
+        output += linebreak;
         for (Book book : getLibrary()) {
-            if (book.isCheckedOut()) {
-                break;
+            if (!book.isCheckedOut()) {
+                output += String.format(bookLine, book.getTitle(), book.getAuthor(), book.getYear());
             }
         }
+        output += linebreak;
         return output;
-        /*
-        return  "                  Title                        Author        Year  \n" +
-                " ---------------------------------------- ----------------- ------ \n" +
-                "  The Conquest of Bread                    Peter Kropotkin   1892  \n" +
-                "  Capital. Critique of Political Economy   Karl Marx         1867  \n" +
-                "  The Ego and Its own                      Max Stirner       1845  \n";
-                */
     }
 
-    public boolean checkout(String book) {
-        return true;
+    public boolean checkout(String title) {
+        for (Book book : library) {
+            if (book.getTitle().equals(title)) {
+                if (!book.isCheckedOut()) {
+                    book.setCheckedOut(true);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

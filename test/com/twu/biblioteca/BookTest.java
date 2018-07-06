@@ -27,13 +27,15 @@ public class BookTest {
 
     @Test
     public void listBookDetailsTest() {
-        String expected = "                  Title                        Author        Year  \n" +
-                " ---------------------------------------- ----------------- ------ \n" +
-                "  The Conquest of Bread                    Peter Kropotkin   1892  \n" +
-                "  Capital. Critique of Political Economy   Karl Marx         1867  \n" +
-                "  The Ego and Its own                      Max Stirner       1845  \n";
+        String expected = "+-----------------------------------------+-----------------+------+\n" +
+                "| Title                                   | Author          | Year |\n" +
+                "+-----------------------------------------+-----------------+------+\n" +
+                "| The Conquest of Bread                   | Peter Kropotkin | 1892 |\n" +
+                "| Capital. Critique of Political Economy  | Karl Marx       | 1867 |\n" +
+                "| The Ego and Its Own                     | Max Stirner     | 1845 |\n" +
+                "+-----------------------------------------+-----------------+------+\n";
         String books = bib.listBookDetails();
-        assertEquals(books, expected);
+        assertEquals(expected, books);
     }
 
     @Test
@@ -43,13 +45,15 @@ public class BookTest {
 
     @Test
     public void listBookDetailsDoesntDisplayCheckedOutBooksTest() {
-        String expected = "                  Title                        Author        Year  \n" +
-                " ---------------------------------------- ----------------- ------ \n" +
-                "  Capital. Critique of Political Economy   Karl Marx         1867  \n" +
-                "  The Ego and Its own                      Max Stirner       1845  \n";
-        bib.checkout("The Conquest of Bread");
+        String expected = "+-----------------------------------------+-----------------+------+\n" +
+                "| Title                                   | Author          | Year |\n" +
+                "+-----------------------------------------+-----------------+------+\n" +
+                "| The Conquest of Bread                   | Peter Kropotkin | 1892 |\n" +
+                "| Capital. Critique of Political Economy  | Karl Marx       | 1867 |\n" +
+                "+-----------------------------------------+-----------------+------+\n";
+        bib.checkout("The Ego and Its Own");
         String books = bib.listBookDetails();
-        assertEquals(books, expected);
+        assertEquals(expected, books);
     }
 
     @Test
