@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 import static junit.framework.TestCase.assertTrue;
@@ -13,17 +14,30 @@ import static org.junit.Assert.assertEquals;
 
 public class UserInterfaceTest {
     private ByteArrayOutputStream outputStream;
+    private PrintStream originalOut;
+    private InputStream originalIn;
 
     @Before
     public void setUp() {
+        originalOut = System.out;
+        originalIn = System.in;
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
     }
 
     @After
     public void restore() {
-        System.setIn(System.in);
-        System.setOut(System.out);
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+    }
+
+    @Test
+    public void noinputTest() {
+        final String input = "";
+        final String output = "Please provide a value\n";
+        setInput(input);
+        BibliotecaApp.main(new String[0]);
+        assertTrue(getOutput().contains(output));
     }
 
     @Test

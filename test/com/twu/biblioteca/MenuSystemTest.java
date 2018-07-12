@@ -22,7 +22,7 @@ public class MenuSystemTest {
     }
 
     private void iterateThirdItem() {
-        this.secondItem++;
+        this.thirdItem++;
     }
 
     @Before

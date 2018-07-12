@@ -62,7 +62,7 @@ public class Biblioteca {
         for (Book book : library) {
             if (book.getTitle().equals(title)) {
                 if (!book.isCheckedOut()) {
-                    book.setCheckedOut(true);
+                    book.checkout();
                     return true;
                 }
             }
@@ -74,7 +74,7 @@ public class Biblioteca {
         for (Book book : library) {
             if (book.getTitle().equals(title)) {
                 if (book.isCheckedOut()) {
-                    book.setCheckedOut(false);
+                    book.checkin();
                     return true;
                 }
             }

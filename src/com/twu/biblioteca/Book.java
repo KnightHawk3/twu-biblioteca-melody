@@ -40,7 +40,11 @@ public class Book {
         return checkedOut;
     }
 
-    public void setCheckedOut(boolean b) {
-        this.checkedOut = b;
+    public void checkin() {
+        this.checkedOut = false;
+    }
+
+    public void checkout() {
+        this.checkedOut = true;
     }
 }
