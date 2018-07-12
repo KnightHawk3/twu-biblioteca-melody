@@ -1,34 +1,31 @@
 package com.twu.biblioteca;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class UserInterfaceTest {
     private ByteArrayOutputStream outputStream;
-    private PrintStream originalOut;
-    private InputStream originalIn;
+    private PrintStream ps;
+    private InputStream inputStream;
+
+    private void setInput(String input) {
+        this.inputStream = new ByteArrayInputStream(input.getBytes());
+    }
 
     @Before
     public void setUp() {
-        originalOut = System.out;
-        originalIn = System.in;
         outputStream = new ByteArrayOutputStream();
+        try {
+            ps = new PrintStream(outputStream, true, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         System.setOut(new PrintStream(outputStream));
-    }
-
-    @After
-    public void restore() {
-        System.setIn(originalIn);
-        System.setOut(originalOut);
     }
 
     @Test
@@ -36,7 +33,7 @@ public class UserInterfaceTest {
         final String input = "";
         final String output = "Please provide a value\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertTrue(getOutput().contains(output));
     }
 
@@ -45,7 +42,7 @@ public class UserInterfaceTest {
         final String input = "0";
         final String output = "Welcome to Biblioteca!\nPress any key to select an option.\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertTrue(getOutput().contains(output));
     }
 
@@ -65,7 +62,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
@@ -92,7 +89,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
@@ -114,7 +111,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
@@ -144,7 +141,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
@@ -166,7 +163,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
@@ -196,7 +193,7 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
@@ -218,16 +215,16 @@ public class UserInterfaceTest {
                 " 3 | Return book\n" +
                 " 0 | Quit\n\n";
         setInput(input);
-        BibliotecaApp.main(new String[0]);
+        BibliotecaApp.main(ps, inputStream);
         assertEquals(output, getOutput());
     }
 
     private String getOutput() {
-        return outputStream.toString().replace("\r", "");
-    }
-
-    private void setInput(String data) {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(data.getBytes());
-        System.setIn(inputStream);
+        try {
+            return outputStream.toString("UTF-8").replace("\r", "");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return e.getStackTrace().toString();
+        }
     }
 }
