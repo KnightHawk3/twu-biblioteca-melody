@@ -1,33 +1,76 @@
 package com.twu.biblioteca;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Biblioteca {
-    private List<Book> library;
+    private List<Item> library;
 
-    public Biblioteca(List<Book> library) {
+    public Biblioteca(List<Item> library) {
         this.library = library;
     }
 
-    public List<Book> getLibrary() {
+    public List<Item> getLibrary(Class<?> cls) {
+        List<Item> output = new ArrayList<>();
+        for (Item item : library) {
+            if (item.getClass() == cls) {
+                output.add(item);
+            }
+        }
         return library;
     }
 
-    public String listBookDetails() {
+    public List<Item> getLibrary() {
+        return library;
+    }
+
+    public String createTable(List<Item> items, AbstractMap.SimpleImmutableEntry<String, Integer>... columns) {
+        /*
+            This should only take one type of Item (Book or Movie).
+         */
         StringBuilder output = new StringBuilder();
+        // Build formatting strings for table
+        String itemLine = "";
+
+        String linebreak = "+";
+        for (AbstractMap.SimpleImmutableEntry<String, Integer> col : columns) {
+            linebreak += String.join("", Collections.nCopies(col.getValue() + 2, "-")) + "+";
+        }
+        linebreak += "\n";
+
+        itemLine = String.format(items.get(0).getTableFmt(), Arrays.stream(columns).map(e -> e.getValue()).toArray());
+
+        // Build the table
+        output.append(linebreak);
+        output.append(String.format(itemLine, Arrays.stream(columns).map(e -> e.getKey()).toArray()));
+        output.append(linebreak);
+        for (Item item : getLibrary()) {
+            output.append(String.format(itemLine, item.getTitle(), item.getCreator(), item.getYear()));
+        }
+        output.append(linebreak);
+        return output.toString();
+    }
+
+    public String listBookDetails() {
         int titleWidth = 0;
         int authorWidth = 0;
         int yearWidth = 0;
 
+        List<Item> lib = getLibrary(Book.class);
+
+        for (Item item : lib) {
+            if (item.isCheckedOut()) {
+                lib.remove(item);
+            }
+        }
+
         // Find out column widths
-        for (Book book : getLibrary()) {
+        for (Item book : getLibrary(Book.class)) {
             if (!book.isCheckedOut()) {
                 if (book.getTitle().length() > titleWidth) {
                     titleWidth = book.getTitle().length();
                 }
-                if (book.getAuthor().length() > authorWidth) {
-                    authorWidth = book.getAuthor().length();
+                if (book.getCreator().length() > authorWidth) {
+                    authorWidth = book.getCreator().length();
                 }
                 if (book.getYear() > yearWidth) {
                     yearWidth = String.valueOf(book.getYear()).length();
@@ -35,34 +78,19 @@ public class Biblioteca {
             }
         }
 
-        // Build formatting strings for table
-        String linebreak = "";
-        String bookLine = "";
+        String output = createTable(lib,
+                new AbstractMap.SimpleImmutableEntry<>("Title", titleWidth),
+                new AbstractMap.SimpleImmutableEntry<>("Author", authorWidth),
+                new AbstractMap.SimpleImmutableEntry<>("Year", yearWidth));
 
-        // Please take a moment to ponder why "".repeat(5) is going to be released in JDK 11.
-        linebreak += "+" + String.join("", Collections.nCopies(titleWidth + 2, "-")) + "+";
-        linebreak += String.join("", Collections.nCopies(authorWidth + 2, "-")) + "+";
-        linebreak += String.join("", Collections.nCopies(yearWidth + 2, "-")) + "+\n";
-        bookLine += "| %-" + titleWidth + "s | %-" + authorWidth + "s | %-" + yearWidth + "s |\n";
-
-        // Build the table
-        output.append(linebreak);
-        output.append(String.format(bookLine, "Title", "Author", "Year"));
-        output.append(linebreak);
-        for (Book book : getLibrary()) {
-            if (!book.isCheckedOut()) {
-                output.append(String.format(bookLine, book.getTitle(), book.getAuthor(), book.getYear()));
-            }
-        }
-        output.append(linebreak);
-        return output.toString();
+        return output;
     }
 
     public boolean checkoutBook(String title) {
-        for (Book book : library) {
-            if (book.getTitle().equals(title)) {
-                if (!book.isCheckedOut()) {
-                    book.checkout();
+        for (Item item : library) {
+            if (item.getTitle().equals(title)) {
+                if (!item.isCheckedOut()) {
+                    item.checkout();
                     return true;
                 }
             }
@@ -71,10 +99,10 @@ public class Biblioteca {
     }
 
     public boolean returnBook(String title) {
-        for (Book book : library) {
-            if (book.getTitle().equals(title)) {
-                if (book.isCheckedOut()) {
-                    book.checkin();
+        for (Item item : library) {
+            if (item.getTitle().equals(title)) {
+                if (!item.isCheckedOut()) {
+                    item.checkin();
                     return true;
                 }
             }

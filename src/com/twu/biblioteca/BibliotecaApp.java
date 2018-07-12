@@ -13,12 +13,12 @@ public class BibliotecaApp {
     private static Scanner input;
     private static PrintStream output = System.out;
 
-    private static List<Book> generateBooks() {
-        List<Book> books = new ArrayList<>();
-        books.add(new Book("The Conquest of Bread", "Peter Kropotkin", 1892));
-        books.add(new Book("Capital. Critique of Political Economy ", "Karl Marx", 1867));
-        books.add(new Book("The Ego and Its Own", "Max Stirner", 1845));
-        return books;
+    private static List<Item> generateItems() {
+        List<Item> items = new ArrayList<>();
+        items.add(new Book("The Conquest of Bread", "Peter Kropotkin", 1892));
+        items.add(new Book("Capital. Critique of Political Economy ", "Karl Marx", 1867));
+        items.add(new Book("The Ego and Its Own", "Max Stirner", 1845));
+        return items;
     }
 
     private static MenuItem[] generateMenuItems() {
@@ -38,7 +38,7 @@ public class BibliotecaApp {
         output.println("Welcome to Biblioteca!\nPress any key to select an option.");
 
         input = new Scanner(inputStream);
-        library = new Biblioteca(generateBooks());
+        library = new Biblioteca(generateItems());
         Menu menu = new Menu(generateMenuItems());
 
         while (!menu.isDone()) {

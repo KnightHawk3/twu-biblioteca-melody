@@ -17,7 +17,7 @@ public class BookTest {
     public void setUp() {
         breadBook = new Book("The Conquest of Bread", "Peter Kropotkin", 1892);
         kapitalBook = new Book("Capital. Critique of Political Economy", "Karl Marx", 1867);
-        List<Book> library = new ArrayList<>();
+        List<Item> library = new ArrayList<>();
         library.add(new Book("The Conquest of Bread", "Peter Kropotkin", 1892));
         library.add(new Book("Capital. Critique of Political Economy ", "Karl Marx", 1867));
         library.add(new Book("The Ego and Its Own", "Max Stirner", 1845));
