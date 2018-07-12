@@ -22,12 +22,11 @@ public class BibliotecaApp {
     }
 
     private static MenuItem[] generateMenuItems() {
-        MenuItem[] menuItems = {
+        return new MenuItem[]{
                 new MenuItem("List books", BibliotecaApp::listBooks),
                 new MenuItem("Checkout book", BibliotecaApp::checkoutBook),
                 new MenuItem("Return book", BibliotecaApp::returnBook)
         };
-        return menuItems;
     }
 
     public static void main(String[] args) {
