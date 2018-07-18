@@ -57,9 +57,10 @@ public class Biblioteca {
 
         List<Item> lib = getLibrary(Book.class);
 
-        for (Item item : lib) {
-            if (item.isCheckedOut()) {
-                lib.remove(item);
+        for (int index = 0; index < lib.size(); index++) {
+            if (lib.get(index).isCheckedOut()) {
+                lib.remove(index);
+                index--; // Subtract one form the index to avoid IndexOutOfBoundsError.
             }
         }
 
@@ -101,7 +102,7 @@ public class Biblioteca {
     public boolean returnBook(String title) {
         for (Item item : library) {
             if (item.getTitle().equals(title)) {
-                if (!item.isCheckedOut()) {
+                if (item.isCheckedOut()) {
                     item.checkin();
                     return true;
                 }

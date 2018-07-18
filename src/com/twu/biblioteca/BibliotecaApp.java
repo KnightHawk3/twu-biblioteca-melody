@@ -22,10 +22,11 @@ public class BibliotecaApp {
     }
 
     private static MenuItem[] generateMenuItems() {
+        UserInterface ui = new UserInterface();
         return new MenuItem[]{
-                new MenuItem("List books", BibliotecaApp::listBooks),
-                new MenuItem("Checkout book", BibliotecaApp::checkoutBook),
-                new MenuItem("Return book", BibliotecaApp::returnBook)
+                new MenuItem("List books", () -> output.println(ui.listBooks(library))),
+                new MenuItem("Checkout book", () -> output.println(ui.checkoutBook(library, input))),
+                new MenuItem("Return book", () -> output.println(ui.returnBook(library, input)))
         };
     }
 
@@ -54,25 +55,4 @@ public class BibliotecaApp {
         }
     }
 
-    private static void returnBook() {
-        output.println("Please enter the name of the book to return: ");
-        if (library.returnBook(input.nextLine())) {
-            output.println("Thank you for returning the book.\n");
-        } else {
-            output.println("That is not a valid book to return.\n");
-        }
-    }
-
-    private static void checkoutBook() {
-        output.println("Please enter the name of the book to checkout: ");
-        if (library.checkoutBook(input.nextLine())) {
-            output.println("Thank you! Enjoy the book.\n");
-        } else {
-            output.println("That book is not available.\n");
-        }
-    }
-
-    public static void listBooks() {
-        output.println(library.listBookDetails());
-    }
 }
