@@ -1,21 +1,29 @@
 package com.twu.biblioteca;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Item {
     private final String title;
     private final String creator;
-    private final String tableFmt;
-    private final String[] fieldTitles;
+    private final List<String> header;
     private final int year;
     private boolean checkedOut = false;
+    private String checkedOutLibraryNum;
 
-    public Item(String title, String creator, int year, String tableFmt, String[] fieldTitles) {
+    public Item(String title, String creator, int year, List<String> header) {
         this.title = title;
         this.creator = creator;
         this.year = year;
-        this.tableFmt = tableFmt;
-        this.fieldTitles = fieldTitles;
+        this.header = header;
+    }
+
+    public List<String> getAsRow() {
+        return Arrays.asList(
+                this.getTitle(),
+                this.getCreator(),
+                Integer.toString(this.getYear()));
     }
 
     public String getTitle() {
@@ -36,27 +44,33 @@ public class Item {
 
     public void checkin() {
         this.checkedOut = false;
+        this.checkedOutLibraryNum = null;
     }
 
-    public void checkout() {
+    public String getCheckedOutLibraryNum() {
+        return this.checkedOutLibraryNum;
+    }
+
+    public void checkout(User user) {
         this.checkedOut = true;
+        this.checkedOutLibraryNum = user.getLibraryNumber();
+    }
+
+    public String[] toRow() {
+        return new String[]{title, creator, Integer.toString(year)};
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.title);
+        return Objects.hash(this.title, this.creator);
     }
 
     public boolean equals(Book obj) {
         return (this.hashCode() == obj.hashCode());
     }
 
-    public String getTableFmt() {
-        return tableFmt;
-    }
-
-    public String[] getFieldTitles() {
-        return fieldTitles;
+    public List<String> getHeader() {
+        return header;
     }
 }
 

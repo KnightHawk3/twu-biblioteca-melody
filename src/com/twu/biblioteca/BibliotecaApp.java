@@ -2,8 +2,6 @@ package com.twu.biblioteca;
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -13,21 +11,24 @@ public class BibliotecaApp {
     private static Scanner input;
     private static PrintStream output = System.out;
 
-    private static List<Item> generateItems() {
-        List<Item> items = new ArrayList<>();
-        items.add(new Book("The Conquest of Bread", "Peter Kropotkin", 1892));
-        items.add(new Book("Capital. Critique of Political Economy ", "Karl Marx", 1867));
-        items.add(new Book("The Ego and Its Own", "Max Stirner", 1845));
-        return items;
-    }
-
     private static MenuItem[] generateMenuItems() {
         UserInterface ui = new UserInterface();
         return new MenuItem[]{
                 new MenuItem("List books", () -> output.println(ui.listBooks(library))),
-                new MenuItem("Checkout book", () -> output.println(ui.checkoutBook(library, input))),
-                new MenuItem("Return book", () -> output.println(ui.returnBook(library, input)))
-        };
+                new MenuItem("Checkout item", () -> {
+                    output.print("Please enter the title of the item to checkout: \n");
+                    output.println(ui.checkoutBook(library, input));
+                }),
+                new MenuItem("Return item", () -> {
+                    output.print("Please enter the title of the item to return: \n");
+                    output.println(ui.returnBook(library, input));
+                }),
+                new MenuItem("List movies", () -> output.println(ui.listMovies(library))),
+                new MenuItem("See who checked out an item", () -> {
+                    output.print("Please enter the title of the item you are interested in: ");
+                    output.println(ui.whoHasItem(library, input));
+                }),
+                new MenuItem("Show my contact details", () -> output.println(ui.currentUser(library)))};
     }
 
     public static void main(String[] args) {
@@ -36,12 +37,25 @@ public class BibliotecaApp {
 
     public static void main(PrintStream outputStream, InputStream inputStream) {
         output = outputStream;
-        output.println("Welcome to Biblioteca!\nPress any key to select an option.");
 
         input = new Scanner(inputStream);
-        library = new Biblioteca(generateItems());
+        library = new Biblioteca();
+
+        String username;
+        String password;
+        try {
+            output.print("Library Number: ");
+            username = input.nextLine();
+            output.print("Password: ");
+            password = input.nextLine();
+        } catch (NoSuchElementException e) {
+            output.println("Please provide input on stdin");
+            return;
+        }
+        library.login(username, password);
         Menu menu = new Menu(generateMenuItems());
 
+        output.println("Welcome to Biblioteca!\nPress any key to select an option.");
         while (!menu.isDone()) {
             try {
                 output.println(menu);

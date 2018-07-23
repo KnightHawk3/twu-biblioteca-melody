@@ -12,9 +12,15 @@ public class UserInterfaceTest {
     private ByteArrayOutputStream outputStream;
     private PrintStream ps;
     private InputStream inputStream;
+    private final String loginString = "1234-1234\nbanana\n";
 
     private void setInput(String input) {
         this.inputStream = new ByteArrayInputStream(input.getBytes());
+    }
+    public static void assertContainsAllWords(String output, String ...keywords) {
+        for (String keyword : keywords) {
+            assertTrue(output.contains(keyword));
+        }
     }
 
     @Before
@@ -31,35 +37,42 @@ public class UserInterfaceTest {
     @Test
     public void noinputTest() {
         final String input = "";
-        final String output = "Please provide a value\n";
+        final String output = "Please provide input on stdin\n";
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
         assertTrue(getOutput().contains(output));
     }
 
     @Test
-    public void welcomeMessageTest() {
-        final String input = "0";
-        final String output = "Welcome to Biblioteca!\nPress any key to select an option.\n";
+    public void loginTest() {
+        final String input = "1234-1234\nbanana\n0";
+        final String output = "Library Number: Password: Welcome to Biblioteca!\nPress any key to select an option.\n";
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
+        String out = getOutput();
         assertTrue(getOutput().contains(output));
     }
 
     @Test
     public void invalidInputShowsErrorTest() {
-        final String input = "e\n0";
-        final String output = "Welcome to Biblioteca!\n" +
+        final String input = loginString + "e\n0";
+        final String output = "Library Number: Password: Welcome to Biblioteca!\n" +
                 "Press any key to select an option.\n" +
                 " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
+                " 2 | Checkout item\n" +
+                " 3 | Return item\n" +
+                " 4 | List movies\n" +
+                " 5 | See who checked out an item\n" +
+                " 6 | Show my contact details\n" +
                 " 0 | Quit\n" +
                 "\n\n" +
                 "Select a valid option!\n" +
                 " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
+                " 2 | Checkout item\n" +
+                " 3 | Return item\n" +
+                " 4 | List movies\n" +
+                " 5 | See who checked out an item\n" +
+                " 6 | Show my contact details\n" +
                 " 0 | Quit\n\n";
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
@@ -68,155 +81,107 @@ public class UserInterfaceTest {
 
     @Test
     public void listBooksTest() {
-        final String input = "1\n0";
-        final String output = "Welcome to Biblioteca!\n" +
-                "Press any key to select an option.\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "+-----------------------------------------+-----------------+------+\n" +
-                "| Title                                   | Author          | Year |\n" +
-                "+-----------------------------------------+-----------------+------+\n" +
-                "| The Conquest of Bread                   | Peter Kropotkin | 1892 |\n" +
-                "| Capital. Critique of Political Economy  | Karl Marx       | 1867 |\n" +
-                "| The Ego and Its Own                     | Max Stirner     | 1845 |\n" +
-                "+-----------------------------------------+-----------------+------+\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n\n";
+        final String input = loginString + "1\n0";
+        final String[] output = {
+                "The Conquest of Bread", "Peter Kropotkin", "1892",
+                "Capital. Critique of Political Economy", "Karl Marx", "1867",
+                "The Ego and Its Own", "Max Stirner", "1845"
+        };
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
-        assertEquals(output, getOutput());
+        assertContainsAllWords(getOutput(), output);
     }
 
     @Test
     public void checkoutBooksTest() {
-        final String input = "2\nThe Conquest of Bread\n0";
-        final String output = "Welcome to Biblioteca!\n" +
-                "Press any key to select an option.\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to checkout: \n" +
-                "Thank you! Enjoy the book.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n\n";
+        final String input = loginString + "2\nThe Conquest of Bread\n0";
+        final String[] output = new String[] {
+                "Please enter the title of the item to checkout: \n",
+                "Thank you! Enjoy the item.\n"
+        };
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
-        assertEquals(output, getOutput());
+        assertContainsAllWords(getOutput(), output);
     }
 
     @Test
     public void returnBooksTest() {
-        final String input = "2\nThe Conquest of Bread\n3\nThe Conquest of Bread\n0";
-        final String output = "Welcome to Biblioteca!\n" +
-                "Press any key to select an option.\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to checkout: \n" +
-                "Thank you! Enjoy the book.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to return: \n" +
-                "Thank you for returning the book.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n\n";
+        final String input = loginString + "2\nThe Conquest of Bread\n3\nThe Conquest of Bread\n0";
+        final String[] output = new String[]{
+                "Please enter the title of the item to return:",
+                "Thank you for returning the item."
+        };
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
-        assertEquals(output, getOutput());
+        String out = getOutput();
+        assertContainsAllWords(getOutput(), output);
     }
 
     @Test
     public void checkoutFakeBookFailsTest() {
-        final String input = "2\nThe cat in the hat\n0";
-        final String output = "Welcome to Biblioteca!\n" +
-                "Press any key to select an option.\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to checkout: \n" +
-                "That book is not available.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n\n";
+        final String input = loginString + "2\nThe cat in the hat\n0";
+        final String output = "That item is not available.\n";
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
-        assertEquals(output, getOutput());
+        assertContainsAllWords(getOutput(), output);
     }
 
     @Test
     public void checkoutTwiceFailsTest() {
-        final String input = "2\nThe Conquest of Bread\n2\nThe Conquest of Bread\n0";
-        final String output = "Welcome to Biblioteca!\n" +
-                "Press any key to select an option.\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to checkout: \n" +
-                "Thank you! Enjoy the book.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to checkout: \n" +
-                "That book is not available.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n\n";
+        final String input = loginString + "2\nThe Conquest of Bread\n2\nThe Conquest of Bread\n0";
+        final String[] output = new String[]{
+                "Thank you! Enjoy the item.",
+                "That item is not available."
+        };
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
-        assertEquals(output, getOutput());
+        assertContainsAllWords(getOutput(), output);
     }
 
     @Test
-    public void returnNotCheckedOutBooksFailsTest() {
-        final String input = "3\nThe Conquest of Bread\n0";
-        final String output = "Welcome to Biblioteca!\n" +
-                "Press any key to select an option.\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n" +
-                "\n" +
-                "Please enter the name of the book to return: \n" +
-                "That is not a valid book to return.\n" +
-                "\n" +
-                " 1 | List books\n" +
-                " 2 | Checkout book\n" +
-                " 3 | Return book\n" +
-                " 0 | Quit\n\n";
+    public void returnNotCheckedOutItemsFailsTest() {
+        final String input = loginString + "3\nThe Conquest of Bread\n0";
+        final String output = "That is not a valid item to return.";
         setInput(input);
         BibliotecaApp.main(ps, inputStream);
-        assertEquals(output, getOutput());
+        assertContainsAllWords(getOutput(), output);
+    }
+
+    @Test
+    public void listMoviesTest() {
+        final String input = loginString + "4\n0";
+        final String[] output = new String[]{
+                "Memento", "Nolan", "Battle of Algiers", "1966", "10", "Reds"
+        };
+        setInput(input);
+        BibliotecaApp.main(ps, inputStream);
+        assertContainsAllWords(getOutput(), output);
+    }
+
+    @Test
+    public void getWhoCheckedOutBookTest() {
+        final String input = loginString + "2\nThe Conquest of Bread\n5\nThe Conquest of Bread\n0";
+        final String[] output = new String[]{
+                "Melody Kelly",
+                "melody@melody.blue",
+                "555-555"
+        };
+        setInput(input);
+        BibliotecaApp.main(ps, inputStream);
+        assertContainsAllWords(getOutput(), output);
+    }
+
+    @Test
+    public void getCurrentUserTest() {
+        final String input = loginString + "6\n0";
+        final String[] output = new String[]{
+                "Melody Kelly",
+                "melody@melody.blue",
+                "555-555"
+        };
+        setInput(input);
+        BibliotecaApp.main(ps, inputStream);
+        assertContainsAllWords(getOutput(), output);
     }
 
     private String getOutput() {

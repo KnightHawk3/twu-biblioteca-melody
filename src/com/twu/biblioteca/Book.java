@@ -1,13 +1,13 @@
 package com.twu.biblioteca;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Book extends Item {
 
     public Book(String title, String creator, int year) {
         super(title, creator, year,
-                "| %%-%ss | %%-%ss | %%-%ss |\n",
-                new String[]{"Title", "Author", "Year"});
+                Arrays.asList("Title", "Author", "Year"));
     }
 
     @Override

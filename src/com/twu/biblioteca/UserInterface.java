@@ -7,22 +7,20 @@ public class UserInterface {
 
     public String returnBook(Biblioteca library, Scanner input) {
         output = new StringBuilder();
-        output.append("Please enter the name of the book to return: \n");
-        if (library.returnBook(input.nextLine())) {
-            output.append("Thank you for returning the book.\n");
+        if (library.returnItem(input.nextLine())) {
+            output.append("Thank you for returning the item.\n");
         } else {
-            output.append("That is not a valid book to return.\n");
+            output.append("That is not a valid item to return.\n");
         }
         return output.toString();
     }
 
     public String checkoutBook(Biblioteca library, Scanner input) {
         output = new StringBuilder();
-        output.append("Please enter the name of the book to checkout: \n");
-        if (library.checkoutBook(input.nextLine())) {
-            output.append("Thank you! Enjoy the book.\n");
+        if (library.checkoutItem(input.nextLine())) {
+            output.append("Thank you! Enjoy the item.\n");
         } else {
-            output.append("That book is not available.\n");
+            output.append("That item is not available.\n");
         }
         return output.toString();
     }
@@ -31,5 +29,27 @@ public class UserInterface {
         output = new StringBuilder();
         output.append(library.listBookDetails());
         return output.toString();
+    }
+
+    public String listMovies(Biblioteca library) {
+        output = new StringBuilder();
+        output.append(library.listMovieDetails());
+        return output.toString();
+    }
+
+    public String whoHasItem(Biblioteca library, Scanner input) {
+        output = new StringBuilder();
+        User whom = library.whoHasItem(input.nextLine());
+        if (whom != null) {
+            output.append(whom.toString());
+        } else {
+            output.append("This is not a checked out item");
+        }
+        return output.toString();
+    }
+
+    public String currentUser(Biblioteca library) {
+        User user = library.getCurrentUser();
+        return user.toString();
     }
 }
